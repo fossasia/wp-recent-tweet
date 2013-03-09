@@ -1,4 +1,4 @@
-=== Recent Tweets Widget for Twitter API v1.1 with Cache ===
+=== Recent Tweets Widget ===
 Contributors: themeprince
 Donate link: http://themeprince.com/
 Tags: recent tweets, twitter widget, twitter api v1.1, cache
