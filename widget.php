@@ -49,7 +49,7 @@
 							  
 							  							  
 							$connection = getConnectionWithAccessToken($instance['consumerkey'], $instance['consumersecret'], $instance['accesstoken'], $instance['accesstokensecret']);
-							$tweets = $connection->get("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$instance['username']."&count=10") or die('Couldn\'t retrieve tweets! Wrong username?');
+							$tweets = $connection->get("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$instance['username']."&count=10&exclude_replies=".$instance['excludereplies']) or die('Couldn\'t retrieve tweets! Wrong username?');
 							
 														
 							if(!empty($tweets->errors)){
@@ -77,69 +77,7 @@
 						}
 						
 						
-						
-						
-					
-					
-					
-										
-					//convert links to clickable format
-						function convert_links($status,$targetBlank=true,$linkMaxLen=250){
-						 
-							// the target
-								$target=$targetBlank ? " target=\"_blank\" " : "";
-							 
-							// convert link to url
-								$status = preg_replace("/((http:\/\/|https:\/\/)[^ )
-]+)/e", "'<a href=\"$1\" title=\"$1\" $target >'. ((strlen('$1')>=$linkMaxLen ? substr('$1',0,$linkMaxLen).'...':'$1')).'</a>'", $status);
-							 
-							// convert @ to follow
-								$status = preg_replace("/(@([_a-z0-9\-]+))/i","<a href=\"http://twitter.com/$2\" title=\"Follow $2\" $target >$1</a>",$status);
-							 
-							// convert # to search
-								$status = preg_replace("/(#([_a-z0-9\-]+))/i","<a href=\"https://twitter.com/search?q=$2\" title=\"Search $1\" $target >$1</a>",$status);
-							 
-							// return the status
-								return $status;
-						}
-					
-					
-					//convert dates to readable format	
-						function relative_time($a) {
-							//get current timestampt
-							$b = strtotime("now"); 
-							//get timestamp when tweet created
-							$c = strtotime($a);
-							//get difference
-							$d = $b - $c;
-							//calculate different time values
-							$minute = 60;
-							$hour = $minute * 60;
-							$day = $hour * 24;
-							$week = $day * 7;
-								
-							if(is_numeric($d) && $d > 0) {
-								//if less then 3 seconds
-								if($d < 3) return "right now";
-								//if less then minute
-								if($d < $minute) return floor($d) . " seconds ago";
-								//if less then 2 minutes
-								if($d < $minute * 2) return "about 1 minute ago";
-								//if less then hour
-								if($d < $hour) return floor($d / $minute) . " minutes ago";
-								//if less then 2 hours
-								if($d < $hour * 2) return "about 1 hour ago";
-								//if less then day
-								if($d < $day) return floor($d / $hour) . " hours ago";
-								//if more then day, but less then 2 days
-								if($d > $day && $d < $day * 2) return "yesterday";
-								//if less then year
-								if($d < $day * 365) return floor($d / $day) . " days ago";
-								//else return more than a year
-								return "over a year ago";
-							}
-						}	
-							
+												
 					
 					$tp_twitter_plugin_tweets = maybe_unserialize(get_option('tp_twitter_plugin_tweets'));
 					if(!empty($tp_twitter_plugin_tweets)){
@@ -148,7 +86,7 @@
 							<ul>';
 							$fctr = '1';
 							foreach($tp_twitter_plugin_tweets as $tweet){								
-								print '<li><span>'.convert_links($tweet['text']).'</span><br /><a class="twitter_time" target="_blank" href="http://twitter.com/'.$instance['username'].'/statuses/'.$tweet['status_id'].'">'.relative_time($tweet['created_at']).'</a></li>';
+								print '<li><span>'.tp_convert_links($tweet['text']).'</span><br /><a class="twitter_time" target="_blank" href="http://twitter.com/'.$instance['username'].'/statuses/'.$tweet['status_id'].'">'.tp_relative_time($tweet['created_at']).'</a></li>';
 								if($fctr == $instance['tweetstoshow']){ break; }
 								$fctr++;
 							}
@@ -175,6 +113,7 @@
 				$instance['cachetime'] = strip_tags( $new_instance['cachetime'] );
 				$instance['username'] = strip_tags( $new_instance['username'] );
 				$instance['tweetstoshow'] = strip_tags( $new_instance['tweetstoshow'] );
+				$instance['excludereplies'] = strip_tags( $new_instance['excludereplies'] );
 
 				if($old_instance['username'] != $new_instance['username']){
 					delete_option('tp_twitter_plugin_last_cache_time');
@@ -211,9 +150,81 @@
 						echo '<option value="'.$i.'"'; if($instance['tweetstoshow'] == $i){ echo ' selected="selected"'; } echo '>'.$i.'</option>';						
 					}
 					echo '
-					</select></p>';		
+					</select></p>
+				<p><label>Exclude replies:</label>
+					<input type="checkbox" name="'.$this->get_field_name( 'excludereplies' ).'" id="'.$this->get_field_id( 'excludereplies' ).'" value="true"'; 
+					if(esc_attr($instance['excludereplies']) == 'true'){
+						print ' checked="checked"';
+					}					
+					print ' /></p>';		
 			}
 	}
+	
+	
+	
+
+										
+					//convert links to clickable format
+					if (!function_exists('tp_convert_links')) {
+						function tp_convert_links($status,$targetBlank=true,$linkMaxLen=250){
+						 
+							// the target
+								$target=$targetBlank ? " target=\"_blank\" " : "";
+							 
+							// convert link to url
+								$status = preg_replace("/((http:\/\/|https:\/\/)[^ )
+]+)/e", "'<a href=\"$1\" title=\"$1\" $target >'. ((strlen('$1')>=$linkMaxLen ? substr('$1',0,$linkMaxLen).'...':'$1')).'</a>'", $status);
+							 
+							// convert @ to follow
+								$status = preg_replace("/(@([_a-z0-9\-]+))/i","<a href=\"http://twitter.com/$2\" title=\"Follow $2\" $target >$1</a>",$status);
+							 
+							// convert # to search
+								$status = preg_replace("/(#([_a-z0-9\-]+))/i","<a href=\"https://twitter.com/search?q=$2\" title=\"Search $1\" $target >$1</a>",$status);
+							 
+							// return the status
+								return $status;
+						}
+					}
+					
+					
+					//convert dates to readable format	
+					if (!function_exists('tp_relative_time')) {
+						function tp_relative_time($a) {
+							//get current timestampt
+							$b = strtotime("now"); 
+							//get timestamp when tweet created
+							$c = strtotime($a);
+							//get difference
+							$d = $b - $c;
+							//calculate different time values
+							$minute = 60;
+							$hour = $minute * 60;
+							$day = $hour * 24;
+							$week = $day * 7;
+								
+							if(is_numeric($d) && $d > 0) {
+								//if less then 3 seconds
+								if($d < 3) return "right now";
+								//if less then minute
+								if($d < $minute) return floor($d) . " seconds ago";
+								//if less then 2 minutes
+								if($d < $minute * 2) return "about 1 minute ago";
+								//if less then hour
+								if($d < $hour) return floor($d / $minute) . " minutes ago";
+								//if less then 2 hours
+								if($d < $hour * 2) return "about 1 hour ago";
+								//if less then day
+								if($d < $day) return floor($d / $hour) . " hours ago";
+								//if more then day, but less then 2 days
+								if($d > $day && $d < $day * 2) return "yesterday";
+								//if less then year
+								if($d < $day * 365) return floor($d / $day) . " days ago";
+								//else return more than a year
+								return "over a year ago";
+							}
+						}	
+					}	
+	
 	
 	
 // register	widget
@@ -221,5 +232,8 @@
 		register_widget('tp_widget_recent_tweets');
 	}
 	add_action('init', 'register_tp_twitter_widget', 1)
+
+
 	
 ?>
+
