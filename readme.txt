@@ -4,7 +4,7 @@ Donate link: http://themeprince.com/
 Tags: recent tweets, twitter widget, twitter api v1.1, cache
 Requires at least: 3.4.1
 Tested up to: 3.6
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ You will need to visit [this link](https://dev.twitter.com/apps/ "Twitter"), sig
 2. How it looks on frontend page
 
 == Changelog ==
+
+= 1.2 =
+* Header output issue fix
 
 = 1.1 =
 * Some styling issues were fixed

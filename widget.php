@@ -1,6 +1,5 @@
 <?php
 
-
 // widget function
 	class tp_widget_recent_tweets extends WP_Widget {
 		
@@ -153,7 +152,7 @@
 					</select></p>
 				<p><label>Exclude replies:</label>
 					<input type="checkbox" name="'.$this->get_field_name( 'excludereplies' ).'" id="'.$this->get_field_id( 'excludereplies' ).'" value="true"'; 
-					if(esc_attr($instance['excludereplies']) == 'true'){
+					if(!empty($instance['excludereplies']) && esc_attr($instance['excludereplies']) == 'true'){
 						print ' checked="checked"';
 					}					
 					print ' /></p>';		
@@ -232,8 +231,5 @@
 		register_widget('tp_widget_recent_tweets');
 	}
 	add_action('init', 'register_tp_twitter_widget', 1)
-
-
 	
 ?>
-
