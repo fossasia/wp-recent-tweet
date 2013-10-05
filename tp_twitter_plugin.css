@@ -1,11 +1,11 @@
 
-.widget .tp_recent_tweets {
+.tp_recent_tweets {
 	float: left;
 	clear: left;
 
 }
 
-.widget .tp_recent_tweets  li {
+.tp_recent_tweets  li {
 	background-image: url('assets/tweet.png');
 	background-repeat: no-repeat;	
 	background-position: 0px 4px;
@@ -17,11 +17,11 @@
 	list-style-type: none;
 }
 
-.widget .tp_recent_tweets  li a {
+.tp_recent_tweets  li a {
 	font-weight: bold;	
 }
 
-.widget .tp_recent_tweets .twitter_time {
+.tp_recent_tweets .twitter_time {
 	color: #999;
 	font-size: 12px;
 	font-style: italic;	

@@ -60,11 +60,17 @@
 								return;
 							}
 							
+							$tweets_array = array();
 							for($i = 0;$i <= count($tweets); $i++){
 								if(!empty($tweets[$i])){
 									$tweets_array[$i]['created_at'] = $tweets[$i]->created_at;
-									$tweets_array[$i]['text'] = $tweets[$i]->text;			
-									$tweets_array[$i]['status_id'] = $tweets[$i]->id_str;			
+									
+										//clean tweet text
+										$tweets_array[$i]['text'] = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $tweets[$i]->text);
+									
+									if(!empty($tweets[$i]->id_str)){
+										$tweets_array[$i]['status_id'] = $tweets[$i]->id_str;			
+									}
 								}	
 							}							
 							
@@ -84,10 +90,15 @@
 						<div class="tp_recent_tweets">
 							<ul>';
 							$fctr = '1';
-							foreach($tp_twitter_plugin_tweets as $tweet){								
-								print '<li><span>'.tp_convert_links($tweet['text']).'</span><br /><a class="twitter_time" target="_blank" href="http://twitter.com/'.$instance['username'].'/statuses/'.$tweet['status_id'].'">'.tp_relative_time($tweet['created_at']).'</a></li>';
-								if($fctr == $instance['tweetstoshow']){ break; }
-								$fctr++;
+							foreach($tp_twitter_plugin_tweets as $tweet){					
+								if(!empty($tweet['text'])){
+									if(empty($tweet['status_id'])){ $tweet['status_id'] = ''; }
+									if(empty($tweet['created_at'])){ $tweet['created_at'] = ''; }
+								
+									print '<li><span>'.tp_convert_links($tweet['text']).'</span><br /><a class="twitter_time" target="_blank" href="http://twitter.com/'.$instance['username'].'/statuses/'.$tweet['status_id'].'">'.tp_relative_time($tweet['created_at']).'</a></li>';
+									if($fctr == $instance['tweetstoshow']){ break; }
+									$fctr++;
+								}
 							}
 						
 						print '
