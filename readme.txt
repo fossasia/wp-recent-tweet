@@ -3,8 +3,8 @@ Contributors: themeprince
 Donate link: http://themeprince.com/
 Tags: recent tweets, twitter widget, twitter api v1.1, cache
 Requires at least: 3.4.1
-Tested up to: 3.6
-Stable tag: 1.3
+Tested up to: 4.0
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,10 @@ You will need to visit [this link](https://dev.twitter.com/apps/ "Twitter"), sig
 2. How it looks on frontend page
 
 == Changelog ==
+
+= 1.4 =
+* PHP 5.5 deprecated preg_replace() function fix
+* Added gettext calls for easier translation
 
 = 1.3 =
 * Fix for special 4 byte UTF8 characters

@@ -7,7 +7,7 @@
 			parent::__construct(
 				'tp_widget_recent_tweets', // Base ID
 				'* Recent Tweets', // Name
-				array( 'description' => __( 'Display recent tweets', 'ingrid' ), ) // Args
+				array( 'description' => __( 'Display recent tweets', 'tp_tweets' ), ) // Args
 			);
 		}
 
@@ -23,7 +23,7 @@
 				
 					//check settings and die if not set
 						if(empty($instance['consumerkey']) || empty($instance['consumersecret']) || empty($instance['accesstoken']) || empty($instance['accesstokensecret']) || empty($instance['cachetime']) || empty($instance['username'])){
-							echo '<strong>Please fill all widget settings!</strong>' . $after_widget;
+							echo '<strong>'.__('Please fill all widget settings!','tp_tweets').'</strong>' . $after_widget;
 							return;
 						}
 					
@@ -37,7 +37,7 @@
 						if($diff >= $crt || empty($tp_twitter_plugin_last_cache_time)){
 							
 							if(!require_once('twitteroauth.php')){ 
-								echo '<strong>Couldn\'t find twitteroauth.php!</strong>' . $after_widget;
+								echo '<strong>'.__('Couldn\'t find twitteroauth.php!','tp_tweets').'</strong>' . $after_widget;
 								return;
 							}
 														
@@ -53,7 +53,7 @@
 														
 							if(!empty($tweets->errors)){
 								if($tweets->errors[0]->message == 'Invalid or expired token'){
-									echo '<strong>'.$tweets->errors[0]->message.'!</strong><br />You\'ll need to regenerate it <a href="https://dev.twitter.com/apps" target="_blank">here</a>!' . $after_widget;
+									echo '<strong>'.$tweets->errors[0]->message.'!</strong><br />' . __('You\'ll need to regenerate it <a href="https://dev.twitter.com/apps" target="_blank">here</a>!','tp_tweets') . $after_widget;
 								}else{
 									echo '<strong>'.$tweets->errors[0]->message.'</strong>' . $after_widget;
 								}
@@ -85,7 +85,7 @@
 												
 					
 					$tp_twitter_plugin_tweets = maybe_unserialize(get_option('tp_twitter_plugin_tweets'));
-					if(!empty($tp_twitter_plugin_tweets)){
+					if(!empty($tp_twitter_plugin_tweets) && is_array($tp_twitter_plugin_tweets)){
 						print '
 						<div class="tp_recent_tweets">
 							<ul>';
@@ -103,6 +103,11 @@
 						
 						print '
 							</ul>
+						</div>';
+					}else{
+						print '
+						<div class="tp_recent_tweets">
+							' . __('<b>Error!</b> Couldn\'t retrieve tweets for some reason!','tp_tweets') . '
 						</div>';
 					}
 				
@@ -139,21 +144,21 @@
 				$instance = wp_parse_args( (array) $instance, $defaults );
 						
 				echo '
-				<p><label>Title:</label>
+				<p><label>' . __('Title:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat" /></p>
-				<p><label>Consumer Key:</label>
+				<p><label>' . __('Consumer Key:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'consumerkey' ).'" id="'.$this->get_field_id( 'consumerkey' ).'" value="'.esc_attr($instance['consumerkey']).'" class="widefat" /></p>
-				<p><label>Consumer Secret:</label>
+				<p><label>' . __('Consumer Secret:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'consumersecret' ).'" id="'.$this->get_field_id( 'consumersecret' ).'" value="'.esc_attr($instance['consumersecret']).'" class="widefat" /></p>					
-				<p><label>Access Token:</label>
+				<p><label>' . __('Access Token:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'accesstoken' ).'" id="'.$this->get_field_id( 'accesstoken' ).'" value="'.esc_attr($instance['accesstoken']).'" class="widefat" /></p>									
-				<p><label>Access Token Secret:</label>		
+				<p><label>' . __('Access Token Secret:','tp_tweets') . '</label>		
 					<input type="text" name="'.$this->get_field_name( 'accesstokensecret' ).'" id="'.$this->get_field_id( 'accesstokensecret' ).'" value="'.esc_attr($instance['accesstokensecret']).'" class="widefat" /></p>														
-				<p><label>Cache Tweets in every:</label>
+				<p><label>' . __('Cache Tweets in every:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'cachetime' ).'" id="'.$this->get_field_id( 'cachetime' ).'" value="'.esc_attr($instance['cachetime']).'" class="small-text" /> hours</p>																			
-				<p><label>Twitter Username:</label>
+				<p><label>' . __('Twitter Username:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'username' ).'" id="'.$this->get_field_id( 'username' ).'" value="'.esc_attr($instance['username']).'" class="widefat" /></p>																			
-				<p><label>Tweets to display:</label>
+				<p><label>' . __('Tweets to display:','tp_tweets') . '</label>
 					<select type="text" name="'.$this->get_field_name( 'tweetstoshow' ).'" id="'.$this->get_field_id( 'tweetstoshow' ).'">';
 					$i = 1;
 					for(i; $i <= 10; $i++){
@@ -161,7 +166,7 @@
 					}
 					echo '
 					</select></p>
-				<p><label>Exclude replies:</label>
+				<p><label>' . __('Exclude replies:','tp_tweets') . '</label>
 					<input type="checkbox" name="'.$this->get_field_name( 'excludereplies' ).'" id="'.$this->get_field_id( 'excludereplies' ).'" value="true"'; 
 					if(!empty($instance['excludereplies']) && esc_attr($instance['excludereplies']) == 'true'){
 						print ' checked="checked"';
@@ -181,9 +186,8 @@
 							// the target
 								$target=$targetBlank ? " target=\"_blank\" " : "";
 							 
-							// convert link to url
-								$status = preg_replace("/((http:\/\/|https:\/\/)[^ )
-]+)/e", "'<a href=\"$1\" title=\"$1\" $target >'. ((strlen('$1')>=$linkMaxLen ? substr('$1',0,$linkMaxLen).'...':'$1')).'</a>'", $status);
+							// convert link to url								
+								$status = preg_replace('/\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[A-Z0-9+&@#\/%=~_|]/i', '<a href="\0" target="_blank">\0</a>', $status);
 							 
 							// convert @ to follow
 								$status = preg_replace("/(@([_a-z0-9\-]+))/i","<a href=\"http://twitter.com/$2\" title=\"Follow $2\" $target >$1</a>",$status);
@@ -201,7 +205,7 @@
 					if (!function_exists('tp_relative_time')) {
 						function tp_relative_time($a) {
 							//get current timestampt
-							$b = strtotime("now"); 
+							$b = strtotime('now'); 
 							//get timestamp when tweet created
 							$c = strtotime($a);
 							//get difference
@@ -214,23 +218,23 @@
 								
 							if(is_numeric($d) && $d > 0) {
 								//if less then 3 seconds
-								if($d < 3) return "right now";
+								if($d < 3) return __('right now','tp_tweets');
 								//if less then minute
-								if($d < $minute) return floor($d) . " seconds ago";
+								if($d < $minute) return floor($d) . __(' seconds ago','tp_tweets');
 								//if less then 2 minutes
-								if($d < $minute * 2) return "about 1 minute ago";
+								if($d < $minute * 2) return __('about 1 minute ago','tp_tweets');
 								//if less then hour
-								if($d < $hour) return floor($d / $minute) . " minutes ago";
+								if($d < $hour) return floor($d / $minute) . __(' minutes ago','tp_tweets');
 								//if less then 2 hours
-								if($d < $hour * 2) return "about 1 hour ago";
+								if($d < $hour * 2) return __('about 1 hour ago','tp_tweets');
 								//if less then day
-								if($d < $day) return floor($d / $hour) . " hours ago";
+								if($d < $day) return floor($d / $hour) . __(' hours ago','tp_tweets');
 								//if more then day, but less then 2 days
-								if($d > $day && $d < $day * 2) return "yesterday";
+								if($d > $day && $d < $day * 2) return __('yesterday','tp_tweets');
 								//if less then year
-								if($d < $day * 365) return floor($d / $day) . " days ago";
+								if($d < $day * 365) return floor($d / $day) . __(' days ago','tp_tweets');
 								//else return more than a year
-								return "over a year ago";
+								return __('over a year ago','tp_tweets');
 							}
 						}	
 					}	
