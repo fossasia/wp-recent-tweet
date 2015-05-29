@@ -1,10 +1,10 @@
 === Recent Tweets Widget ===
-Contributors: themeprince
+Contributors: noahkagan
 Donate link: http://themeprince.com/
-Tags: recent tweets, twitter widget, twitter api v1.1, cache
+Tags: recent tweets, twitter widget, twitter api v1.1, cache, twitter, tweets, social media
 Requires at least: 3.4.1
-Tested up to: 4.0
-Stable tag: 1.4
+Tested up to: 4.2.2
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ You will need to visit [this link](https://dev.twitter.com/apps/ "Twitter"), sig
 2. How it looks on frontend page
 
 == Changelog ==
+
+= 1.5 =
+* Settings page and other updates
 
 = 1.4 =
 * PHP 5.5 deprecated preg_replace() function fix

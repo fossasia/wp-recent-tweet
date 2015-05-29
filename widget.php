@@ -26,7 +26,6 @@
 							echo '<strong>'.__('Please fill all widget settings!','tp_tweets').'</strong>' . $after_widget;
 							return;
 						}
-					
 										
 					//check if cache needs update
 						$tp_twitter_plugin_last_cache_time = get_option('tp_twitter_plugin_last_cache_time');
@@ -83,7 +82,6 @@
 						
 						
 												
-					
 					$tp_twitter_plugin_tweets = maybe_unserialize(get_option('tp_twitter_plugin_tweets'));
 					if(!empty($tp_twitter_plugin_tweets) && is_array($tp_twitter_plugin_tweets)){
 						print '
@@ -102,8 +100,15 @@
 							}
 						
 						print '
-							</ul>
-						</div>';
+							</ul>';
+
+							// If we're being supported display the link
+							$tp_twitter_plugin_options = get_option('tp_twitter_plugin_options');
+
+							if ($tp_twitter_plugin_options['support-us'] == 1) {
+								print '<p><i>Check out the <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>';
+							}
+						print '</div>';
 					}else{
 						print '
 						<div class="tp_recent_tweets">
@@ -144,6 +149,8 @@
 				$instance = wp_parse_args( (array) $instance, $defaults );
 						
 				echo '
+				<p>Get your API keys &amp; tokens at:<br /><a href="https://dev.twitter.com/apps/" target="_blank">https://dev.twitter.com/apps/</a></p>
+				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>
 				<p><label>' . __('Title:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat" /></p>
 				<p><label>' . __('Consumer Key:','tp_tweets') . '</label>
