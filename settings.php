@@ -12,7 +12,7 @@ $tp_twitter_plugin_options = get_option('tp_twitter_plugin_options');
         		<td>
         			<select name="tp_twitter_plugin_options[support-us]" id="support-us">
         				<option value="1" <?php echo $tp_twitter_plugin_options['support-us'] == '1' ? 'selected="selected"' : ''; ?>>Yes</option>
-        				<option value="0" <?php echo $tp_twitter_plugin_options['support-us'] == '0' ? 'selected="selected"' : ''; ?>>No</option>
+        				<option value="0" <?php echo !array_key_exists('support-us', $tp_twitter_plugin_options) || $tp_twitter_plugin_options['support-us'] == '0' ? 'selected="selected"' : ''; ?>>No</option>
         			</select>
         		</td>
         	</tr>
