@@ -17,12 +17,12 @@ Recent Tweets Widget plugin for Twitter API v1.1 with Cache. It uses the new Twi
 
 == Installation ==
 
-1. Unzip the downloaded zip file
+1. Unzip the downloaded zip file.
 2. Upload the `recent-tweets` folder and its contents into the `wp-content/plugins/` directory of your WordPress installation
-3. Activate Recent Tweets Widget from Plugins page
-4. Go to your Widgets menu, add `* Recent Tweets` widget to a widget area
-5. Visit [this link](https://dev.twitter.com/apps/ "Twitter") in a new tab, sign in with your account, click on `Create a new application` and create your own keys in case you don't have already
-6. Fill all your widget settings
+3. Activate Recent Tweets Widget from Plugins page.
+4. Go to your Widgets menu, add `* Recent Tweets` widget to a widget area.
+5. Visit [https://apps.twitter.com/](https://apps.twitter.com/ "Twitter") in a new tab, sign in with your account, click on `Create a new application` and create your own keys if you haven't already.
+6. Fill all your widget settings.
 7. Enjoy your new Twitter feed! :)
 
 
@@ -30,7 +30,7 @@ Recent Tweets Widget plugin for Twitter API v1.1 with Cache. It uses the new Twi
 
 = How can I get Consumer Key, Consumer Secret, Access Token and Access Token Secret?  =
 
-You will need to visit [this link](https://dev.twitter.com/apps/ "Twitter"), sign in with your account and create your own keys.
+You will need to visit [https://apps.twitter.com/](https://apps.twitter.com/ "Twitter"), sign in with your account and create your own keys.
 
 == Screenshots ==
 

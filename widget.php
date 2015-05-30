@@ -52,7 +52,7 @@
 														
 							if(!empty($tweets->errors)){
 								if($tweets->errors[0]->message == 'Invalid or expired token'){
-									echo '<strong>'.$tweets->errors[0]->message.'!</strong><br />' . __('You\'ll need to regenerate it <a href="https://dev.twitter.com/apps" target="_blank">here</a>!','tp_tweets') . $after_widget;
+									echo '<strong>'.$tweets->errors[0]->message.'!</strong><br />' . __('You\'ll need to regenerate it <a href="https://apps.twitter.com/" target="_blank">here</a>!','tp_tweets') . $after_widget;
 								}else{
 									echo '<strong>'.$tweets->errors[0]->message.'</strong>' . $after_widget;
 								}
@@ -149,7 +149,7 @@
 				$instance = wp_parse_args( (array) $instance, $defaults );
 						
 				echo '
-				<p>Get your API keys &amp; tokens at:<br /><a href="https://dev.twitter.com/apps/" target="_blank">https://dev.twitter.com/apps/</a></p>
+				<p>Get your API keys &amp; tokens at:<br /><a href="https://apps.twitter.com/" target="_blank">https://apps.twitter.com/</a></p>
 				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>
 				<p><label>' . __('Title:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat" /></p>
