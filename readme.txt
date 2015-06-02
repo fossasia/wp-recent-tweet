@@ -1,6 +1,5 @@
 === Recent Tweets Widget ===
 Contributors: noahkagan
-Donate link: http://themeprince.com/
 Tags: recent tweets, twitter widget, twitter api v1.1, cache, twitter, tweets, social media
 Requires at least: 3.4.1
 Tested up to: 4.2.2
