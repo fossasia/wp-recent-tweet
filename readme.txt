@@ -3,7 +3,7 @@ Contributors: noahkagan
 Tags: recent tweets, twitter widget, twitter api v1.1, cache, twitter, tweets, social media
 Requires at least: 3.4.1
 Tested up to: 4.2.2
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

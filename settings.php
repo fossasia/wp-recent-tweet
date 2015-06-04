@@ -3,9 +3,16 @@ add_thickbox();
 $tp_twitter_plugin_options = get_option('tp_twitter_plugin_options');
 ?>
 <div class="wrap">
+        <?php settings_errors(); ?>
+        <?php /*
+        <div class="updated" style="border-color:#6c65c2;">
+                <p>
+                        Looking for more sharing tools? &nbsp;<a href="<?php echo admin_url('plugin-install.php?tab=plugin-information&plugin=sumome&TB_iframe=true&width=743&height=500'); ?>" class="thickbox button button-primary">Get SumoMe WordPress Plugin</a>
+                </p>
+        </div>
+        */ ?>
 	<?php screen_icon(); ?>
 	<h2>Recent Tweets</h2>
-        <p><i>If you find this plugin useful please <a href="https://wordpress.org/support/view/plugin-reviews/recent-tweets-widget" target="_blank">leave us a review!</a></i></p>
 	<form method="post" action="options.php"> 
 		<?php settings_fields( 'tp_twitter_plugin_options' ); ?>
 		<table class="form-table">
@@ -29,5 +36,6 @@ $tp_twitter_plugin_options = get_option('tp_twitter_plugin_options');
                 <li>Fill all your widget settings.</li>
                 <li>Enjoy your new Twitter feed! :)</li>
         </ol>
-        <p style="border:1px solid #CCCCCC;background:#FFFFFF;padding:8px;">Check out more sharing tools with our <a href="<?php echo admin_url('plugin-install.php?tab=plugin-information&plugin=sumome&TB_iframe=true&width=743&height=500'); ?>" class="thickbox">SumoMe WordPress plugin</a></p>
+        <!--<p style="border:1px solid #CCCCCC;background:#FFFFFF;padding:8px;">Check out more sharing tools with our <a href="<?php echo admin_url('plugin-install.php?tab=plugin-information&plugin=sumome&TB_iframe=true&width=743&height=500'); ?>" class="thickbox">SumoMe WordPress plugin</a></p>-->
+        <p><i>If you find this plugin useful please <a href="https://wordpress.org/support/view/plugin-reviews/recent-tweets-widget" target="_blank">leave us a review!</a></i></p>
 </div>
