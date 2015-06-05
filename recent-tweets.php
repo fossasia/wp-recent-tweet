@@ -61,6 +61,8 @@ function register_tp_twitter_setting() {
 	register_setting( 'tp_twitter_plugin_options', 'tp_twitter_plugin_options'); 
 } 
 add_action( 'admin_init', 'register_tp_twitter_setting' );
+//delete_option('tp_twitter_global_notification');
+add_option('tp_twitter_global_notification', 1);
 
 function tp_twitter_plugin_top_level_menu() {
 	add_menu_page( 'Recent Tweets', 'Recent Tweets', 'manage_options', 'recent-tweets', 'tp_twitter_plugin_settings_page', 'dashicons-twitter');
@@ -68,3 +70,28 @@ function tp_twitter_plugin_top_level_menu() {
 }
 
 add_action( 'admin_menu', 'tp_twitter_plugin_top_level_menu' );
+
+
+function tp_twitter_plugin_global_notice() {
+	if (in_array(substr(basename($_SERVER['REQUEST_URI']), 0, 11), array('plugins.php', 'index.php')) && get_option('tp_twitter_global_notification') == 1) {
+		?>
+			<style type="text/css">
+				#tp_twitter_global_notification a.button:active {vertical-align:baseline;}
+			</style>
+			<div class="updated" id="tp_twitter_global_notification" style="border:3px solid #317A96;position:relative;background:##3c9cc2;background-color:#3c9cc2;color:#ffffff;height:70px;">
+				<a class="notice-dismiss" href="<?php echo admin_url('admin.php?page=recent-tweets&tp_twitter_global_notification=0'); ?>" style="right:165px;top:0;"></a>
+				<a href="<?php echo admin_url('admin.php?page=recent-tweets&tp_twitter_global_notification=0'); ?>" style="position:absolute;top:9px;right:15px;color:#ffffff;">Dismiss and go to settings</a>
+				<p style="font-size:16px;line-height:50px;">
+					<?php _e('Looking for more sharing tools?'); ?> &nbsp;<a style="background-color: #6267BE;border-color: #3C3F76;" href="<?php echo admin_url('plugin-install.php?tab=plugin-information&plugin=sumome&TB_iframe=true&width=743&height=500'); ?>" class="thickbox button button-primary">Get SumoMe WordPress Plugin</a>
+				</p>
+	        </div>
+		<?php
+	}
+}
+add_action( 'admin_notices', 'tp_twitter_plugin_global_notice' );
+
+
+function tp_twitter_plugin_deactivate() {
+	delete_option('tp_twitter_global_notification');
+}
+register_deactivation_hook( __FILE__, 'tp_twitter_plugin_deactivate' );
