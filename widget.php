@@ -252,6 +252,6 @@
 	function register_tp_twitter_widget(){
 		register_widget('tp_widget_recent_tweets');
 	}
-	add_action('init', 'register_tp_twitter_widget', 1)
+	add_action('widgets_init', 'register_tp_twitter_widget', 1)
 	
 ?>
