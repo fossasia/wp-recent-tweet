@@ -2,8 +2,8 @@
 Contributors: noahkagan
 Tags: recent tweets, twitter widget, twitter api v1.1, cache, twitter, tweets, social media
 Requires at least: 3.4.1
-Tested up to: 4.3
-Stable tag: 1.6.4
+Tested up to: 4.4.2
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,12 @@ You will need to visit [https://apps.twitter.com/](https://apps.twitter.com/ "Tw
 2. How it looks on frontend page
 
 == Changelog ==
+
+= 1.6.5 =
+* Updated twitter logo
+* Removed line break before time link and use css instead
+* Fixed some undefined array key and undefined notices
+* Fix for redeclaring OAuthException class
 
 = 1.6.4 =
 * Fix widget for WP 4.3

@@ -93,7 +93,7 @@
 									if(empty($tweet['status_id'])){ $tweet['status_id'] = ''; }
 									if(empty($tweet['created_at'])){ $tweet['created_at'] = ''; }
 								
-									print '<li><span>'.tp_convert_links($tweet['text']).'</span><br /><a class="twitter_time" target="_blank" href="http://twitter.com/'.$instance['username'].'/statuses/'.$tweet['status_id'].'">'.tp_relative_time($tweet['created_at']).'</a></li>';
+									print '<li><span>'.tp_convert_links($tweet['text']).'</span><a class="twitter_time" target="_blank" href="http://twitter.com/'.$instance['username'].'/statuses/'.$tweet['status_id'].'">'.tp_relative_time($tweet['created_at']).'</a></li>';
 									if($fctr == $instance['tweetstoshow']){ break; }
 									$fctr++;
 								}
@@ -168,7 +168,7 @@
 				<p><label>' . __('Tweets to display:','tp_tweets') . '</label>
 					<select type="text" name="'.$this->get_field_name( 'tweetstoshow' ).'" id="'.$this->get_field_id( 'tweetstoshow' ).'">';
 					$i = 1;
-					for(i; $i <= 10; $i++){
+					for($i; $i <= 10; $i++){
 						echo '<option value="'.$i.'"'; if($instance['tweetstoshow'] == $i){ echo ' selected="selected"'; } echo '>'.$i.'</option>';						
 					}
 					echo '

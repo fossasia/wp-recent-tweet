@@ -2,7 +2,7 @@
 add_thickbox();
 $tp_twitter_plugin_options = get_option('tp_twitter_plugin_options');
 
-if ($_GET['tp_twitter_global_notification'] == 0) {
+if (array_key_exists('tp_twitter_global_notification', $_GET) && $_GET['tp_twitter_global_notification'] == 0) {
         update_option('tp_twitter_global_notification', 0);
 }
 ?>

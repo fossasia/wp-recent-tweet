@@ -22,6 +22,7 @@
 }
 
 .tp_recent_tweets .twitter_time {
+	display:block;
 	color: #999;
 	font-size: 12px;
 	font-style: italic;	
