@@ -22,10 +22,16 @@
 
 				
 					//check settings and die if not set
-						if(empty($instance['consumerkey']) || empty($instance['consumersecret']) || empty($instance['accesstoken']) || empty($instance['accesstokensecret']) || empty($instance['cachetime']) || empty($instance['username'])){
+						if((empty($instance['consumerkey']) || empty($instance['consumersecret']) || empty($instance['accesstoken']) || empty($instance['accesstokensecret']) || empty($instance['cachetime']) || empty($instance['username'])) && esc_attr($instance['loklak_api']) != 'true'){
 							echo '<strong>'.__('Please fill all widget settings!','tp_tweets').'</strong>' . $after_widget;
 							return;
 						}
+
+						if( !empty($instance['loklak_api']) && ( esc_attr($instance['loklak_api']  == 'true'))){
+                			$loklak = new Loklak();
+						}
+
+
 										
 					//check if cache needs update
 						$tp_twitter_plugin_last_cache_time = get_option('tp_twitter_plugin_last_cache_time');
@@ -35,20 +41,27 @@
 					 //	yes, it needs update			
 						if($diff >= $crt || empty($tp_twitter_plugin_last_cache_time)){
 							
-							if(!require_once('twitteroauth.php')){ 
-								echo '<strong>'.__('Couldn\'t find twitteroauth.php!','tp_tweets').'</strong>' . $after_widget;
-								return;
+							if( $loklak ){
+					            $screen_name = explode('@', $instance['username'])[1];
+					            $tweets = $loklak->search('', null, null, $screen_name, 10);
+					            $tweets = json_decode($tweets, true);
+					            $tweets = json_decode($tweets['body'], false); 
+					            $tweets = $tweets->statuses;
+					        }
+							else{
+								if(!require_once('twitteroauth.php')){ 
+									echo '<strong>'.__('Couldn\'t find twitteroauth.php!','tp_tweets').'</strong>' . $after_widget;
+									return;
+								}
+															
+								function getConnectionWithAccessToken($cons_key, $cons_secret, $oauth_token, $oauth_token_secret) {
+								  $connection = new TwitterOAuth($cons_key, $cons_secret, $oauth_token, $oauth_token_secret);
+								  return $connection;
+								}
+																  							  
+								$connection = getConnectionWithAccessToken($instance['consumerkey'], $instance['consumersecret'], $instance['accesstoken'], $instance['accesstokensecret']);
+								$tweets = $connection->get("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$instance['username']."&count=10&exclude_replies=".$instance['excludereplies']) or die('Couldn\'t retrieve tweets! Wrong username?');
 							}
-														
-							function getConnectionWithAccessToken($cons_key, $cons_secret, $oauth_token, $oauth_token_secret) {
-							  $connection = new TwitterOAuth($cons_key, $cons_secret, $oauth_token, $oauth_token_secret);
-							  return $connection;
-							}
-							  
-							  							  
-							$connection = getConnectionWithAccessToken($instance['consumerkey'], $instance['consumersecret'], $instance['accesstoken'], $instance['accesstokensecret']);
-							$tweets = $connection->get("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$instance['username']."&count=10&exclude_replies=".$instance['excludereplies']) or die('Couldn\'t retrieve tweets! Wrong username?');
-							
 														
 							if(!empty($tweets->errors)){
 								if($tweets->errors[0]->message == 'Invalid or expired token'){
@@ -134,6 +147,7 @@
 				$instance['username'] = strip_tags( $new_instance['username'] );
 				$instance['tweetstoshow'] = strip_tags( $new_instance['tweetstoshow'] );
 				$instance['excludereplies'] = strip_tags( $new_instance['excludereplies'] );
+				$instance['loklak_api'] = strip_tags(  $new_instance['loklak_api'] );
 
 				if($old_instance['username'] != $new_instance['username']){
 					delete_option('tp_twitter_plugin_last_cache_time');
@@ -162,14 +176,21 @@
 				<p><label>' . __('Access Token Secret:','tp_tweets') . '</label>		
 					<input type="text" name="'.$this->get_field_name( 'accesstokensecret' ).'" id="'.$this->get_field_id( 'accesstokensecret' ).'" value="'.esc_attr($instance['accesstokensecret']).'" class="widefat" /></p>														
 				<p><label>' . __('Cache Tweets in every:','tp_tweets') . '</label>
-					<input type="text" name="'.$this->get_field_name( 'cachetime' ).'" id="'.$this->get_field_id( 'cachetime' ).'" value="'.esc_attr($instance['cachetime']).'" class="small-text" /> hours</p>																			
+					<input type="text" name="'.$this->get_field_name( 'cachetime' ).'" id="'.$this->get_field_id( 'cachetime' ).'" value="'.esc_attr($instance['cachetime']).'" class="small-text"';
+					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true')	
+					{
+						print ' disabled="disabled"';
+					}
+					print ' /> hours</p>';
+
+				echo '
 				<p><label>' . __('Twitter Username:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'username' ).'" id="'.$this->get_field_id( 'username' ).'" value="'.esc_attr($instance['username']).'" class="widefat" /></p>																			
 				<p><label>' . __('Tweets to display:','tp_tweets') . '</label>
 					<select type="text" name="'.$this->get_field_name( 'tweetstoshow' ).'" id="'.$this->get_field_id( 'tweetstoshow' ).'">';
 					$i = 1;
 					for($i; $i <= 10; $i++){
-						echo '<option value="'.$i.'"'; if($instance['tweetstoshow'] == $i){ echo ' selected="selected"'; } echo '>'.$i.'</option>';						
+						echo '<option value="'.$i.'"'; if($instance['tweetstoshow'] == $i){ echo ' selected="selected"'; } echo '>'.$i.'</option>';			
 					}
 					echo '
 					</select></p>
@@ -177,8 +198,15 @@
 					<input type="checkbox" name="'.$this->get_field_name( 'excludereplies' ).'" id="'.$this->get_field_id( 'excludereplies' ).'" value="true"'; 
 					if(!empty($instance['excludereplies']) && esc_attr($instance['excludereplies']) == 'true'){
 						print ' checked="checked"';
+					}				
+					print ' /></p>';
+					echo '
+				<p><label>' . __('Use anonymous API from loklak.org','tp_tweets') . '</label>
+					<input type="checkbox" name="'.$this->get_field_name( 'loklak_api' ).'" id="'.$this->get_field_id( 'loklak_api' ).'" value="true"'; 
+					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
+						print ' checked="checked"';
 					}					
-					print ' /></p>';		
+					print ' /></p>';				
 			}
 	}
 	
