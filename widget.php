@@ -164,7 +164,15 @@
 						
 				echo '
 				<p>Get your API keys &amp; tokens at:<br /><a href="https://apps.twitter.com/" target="_blank">https://apps.twitter.com/</a></p>
-				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>
+				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>';
+				echo '
+				<p>
+					<input type="checkbox" name="'.$this->get_field_name( 'loklak_api' ).'" id="'.$this->get_field_id( 'loklak_api' ).'" value="true"'; 
+					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
+						print ' checked="checked"';
+					}					
+					print ' /><label>' . __('Use anonymous loklak.org API instead of Twitter. <a href="http://loklak.org/">Find more </a>','tp_tweets') . '</label></p>';
+				echo '
 				<p><label>' . __('Title:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat" /></p>
 				<p><label>' . __('Consumer Key:','tp_tweets') . '</label>
@@ -200,13 +208,7 @@
 						print ' checked="checked"';
 					}				
 					print ' /></p>';
-					echo '
-				<p><label>' . __('Use anonymous API from loklak.org','tp_tweets') . '</label>
-					<input type="checkbox" name="'.$this->get_field_name( 'loklak_api' ).'" id="'.$this->get_field_id( 'loklak_api' ).'" value="true"'; 
-					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
-						print ' checked="checked"';
-					}					
-					print ' /></p>';				
+									
 			}
 	}
 	
