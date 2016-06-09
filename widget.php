@@ -43,9 +43,13 @@
 							
 							if( $loklak ){
 					            $screen_name = explode('@', $instance['username'])[1];
-					            $tweets = $loklak->search('', null, null, $screen_name, 10);
+					            $tweets = $loklak->search('', null, null, $screen_name, 10);					            
 					            $tweets = json_decode($tweets, true);
-					            $tweets = json_decode($tweets['body'], false); 
+					            if(!($tweets = json_decode($tweets['body'], false))){
+					            	echo '<strong>'.__('Couldn\'t retrieve tweets from Loklak.org','tp_tweets').'</strong>' . $after_widget;
+					            	return;
+					            }
+
 					            $tweets = $tweets->statuses;
 					        }
 							else{
@@ -113,7 +117,8 @@
 							}
 						
 						print '
-							</ul>';
+							</ul> 
+						</div>';
 
 							// If we're being supported display the link
 							$tp_twitter_plugin_options = get_option('tp_twitter_plugin_options');
@@ -121,7 +126,7 @@
 							if ($tp_twitter_plugin_options['support-us'] == 1) {
 								print '<p><i>Check out the <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>';
 							}
-						print '</div>';
+						
 					}else{
 						print '
 						<div class="tp_recent_tweets">
@@ -163,16 +168,16 @@
 				$instance = wp_parse_args( (array) $instance, $defaults );
 						
 				echo '
-				<p>Get your API keys &amp; tokens at:<br /><a href="https://apps.twitter.com/" target="_blank">https://apps.twitter.com/</a></p>
-				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>';
+				<p>Get your API keys &amp; tokens at:<br /><a href="https://apps.twitter.com/" target="_blank">https://apps.twitter.com/</a></p>';
 				echo '
 				<p>
 					<input type="checkbox" name="'.$this->get_field_name( 'loklak_api' ).'" id="'.$this->get_field_id( 'loklak_api' ).'" value="true"'; 
 					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
 						print ' checked="checked"';
 					}					
-					print ' /><label>' . __('Use anonymous loklak.org API instead of Twitter. <a href="http://loklak.org/">Find more </a>','tp_tweets') . '</label></p>';
+					print ' /><label>' . __('Use anonymous <a href="http://loklak.org/">loklak.org</a> API instead of Twitter. <a href="http://loklak.org/">Find out more</a>','tp_tweets') . '</label></p>';
 				echo '
+				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>
 				<p><label>' . __('Title:','tp_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat" /></p>
 				<p><label>' . __('Consumer Key:','tp_tweets') . '</label>
