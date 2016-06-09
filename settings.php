@@ -19,6 +19,7 @@ if (array_key_exists('tp_twitter_global_notification', $_GET) && $_GET['tp_twitt
 	<?php screen_icon(); ?>
 	<h2>Recent Tweets</h2>
         <h3>Adding the Widget</h3>
+        <p> You can either simply tick loklak.org in the widget settings to use the anonymous <a href="http://loklak.org/">loklak.org</a> service (no registration required) to get tweets showing up in your widget or follow the steps below to connect to twitter.</p>
         <ol>
                 <li><a href="<?php echo admin_url('widgets.php'); ?>" target="_blank">Go to your Widgets menu</a>, add the <code>Recent Tweets</code> widget to a widget area.</li>
                 <li>Visit <a href="https://apps.twitter.com/">https://apps.twitter.com/</a>, sign in with your account, click on <code>Create New App</code> and create your own keys if you haven't already.</li>
