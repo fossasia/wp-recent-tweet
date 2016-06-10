@@ -22,15 +22,14 @@
 
 				
 					//check settings and die if not set
-						if((empty($instance['consumerkey']) || empty($instance['consumersecret']) || empty($instance['accesstoken']) || empty($instance['accesstokensecret']) || empty($instance['cachetime']) || empty($instance['username'])) && esc_attr($instance['loklak_api']) != 'true'){
+						if((empty($instance['consumerkey']) || empty($instance['consumersecret']) || empty($instance['accesstoken']) || empty($instance['accesstokensecret']) || empty($instance['username'])) && empty($instance['loklak_api'])){
 							echo '<strong>'.__('Please fill all widget settings!','tp_tweets').'</strong>' . $after_widget;
 							return;
 						}
 
 						if( !empty($instance['loklak_api']) && ( esc_attr($instance['loklak_api']  == 'true'))){
-                			$loklak = new Loklak();
+                			$loklak = new Loklak();                			
 						}
-
 
 										
 					//check if cache needs update
@@ -41,7 +40,7 @@
 					 //	yes, it needs update			
 						if($diff >= $crt || empty($tp_twitter_plugin_last_cache_time)){
 							
-							if( $loklak ){
+							if( isset($loklak)){
 					            $screen_name = explode('@', $instance['username'])[1];
 					            $tweets = $loklak->search('', null, null, $screen_name, 10);					            
 					            $tweets = json_decode($tweets, true);
@@ -65,8 +64,7 @@
 																  							  
 								$connection = getConnectionWithAccessToken($instance['consumerkey'], $instance['consumersecret'], $instance['accesstoken'], $instance['accesstokensecret']);
 								$tweets = $connection->get("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$instance['username']."&count=10&exclude_replies=".$instance['excludereplies']) or die('Couldn\'t retrieve tweets! Wrong username?');
-							}
-														
+							}					
 							if(!empty($tweets->errors)){
 								if($tweets->errors[0]->message == 'Invalid or expired token'){
 									echo '<strong>'.$tweets->errors[0]->message.'!</strong><br />' . __('You\'ll need to regenerate it <a href="https://apps.twitter.com/" target="_blank">here</a>!','tp_tweets') . $after_widget;
@@ -189,12 +187,7 @@
 				<p><label>' . __('Access Token Secret:','tp_tweets') . '</label>		
 					<input type="text" name="'.$this->get_field_name( 'accesstokensecret' ).'" id="'.$this->get_field_id( 'accesstokensecret' ).'" value="'.esc_attr($instance['accesstokensecret']).'" class="widefat" /></p>														
 				<p><label>' . __('Cache Tweets in every:','tp_tweets') . '</label>
-					<input type="text" name="'.$this->get_field_name( 'cachetime' ).'" id="'.$this->get_field_id( 'cachetime' ).'" value="'.esc_attr($instance['cachetime']).'" class="small-text"';
-					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true')	
-					{
-						print ' disabled="disabled"';
-					}
-					print ' /> hours</p>';
+					<input type="text" name="'.$this->get_field_name( 'cachetime' ).'" id="'.$this->get_field_id( 'cachetime' ).'" value="'.esc_attr($instance['cachetime']).'" class="small-text"/> hours</p>';
 
 				echo '
 				<p><label>' . __('Twitter Username:','tp_tweets') . '</label>
@@ -287,6 +280,12 @@
 	function register_tp_twitter_widget(){
 		register_widget('tp_widget_recent_tweets');
 	}
-	add_action('widgets_init', 'register_tp_twitter_widget', 1)
+	function add_tp_twitter_plugin_script(){
+		wp_register_script('test', plugin_dir_url( __FILE__ ).'/assets/js/tp_twitter_plugin.js', array('jquery'));
+		wp_enqueue_script('test');
+
+	}
+	add_action( 'widgets_init', 'add_tp_twitter_plugin_script' );
+	add_action('widgets_init', 'register_tp_twitter_widget', 1);
 	
 ?>
