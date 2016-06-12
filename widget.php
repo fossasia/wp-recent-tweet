@@ -28,6 +28,7 @@
 						}
 
 						if( !empty($instance['loklak_api']) && ( esc_attr($instance['loklak_api']  == 'true'))){
+							require_once dirname(__FILE__).'/loklak_php_api/loklak.php';
                 			$loklak = new Loklak();                			
 						}
 
@@ -141,6 +142,8 @@
 		//save widget settings 
 			public function update($new_instance, $old_instance) {				
 				$instance = array();
+				//var_dump($new_instance);
+				//die();
 				$instance['title'] = strip_tags( $new_instance['title'] );
 				$instance['consumerkey'] = strip_tags( $new_instance['consumerkey'] );
 				$instance['consumersecret'] = strip_tags( $new_instance['consumersecret'] );
@@ -169,7 +172,7 @@
 				<p>Get your API keys &amp; tokens at:<br /><a href="https://apps.twitter.com/" target="_blank">https://apps.twitter.com/</a></p>';
 				echo '
 				<p>
-					<input type="checkbox" name="'.$this->get_field_name( 'loklak_api' ).'" id="'.$this->get_field_id( 'loklak_api' ).'" value="true"'; 
+					<input type="checkbox" name="'.$this->get_field_name( 'loklak_api' ).'" id="'.$this->get_field_id( 'loklak_api' ).'" value="true" class="rtw-loklak_api"'; 
 					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
 						print ' checked="checked"';
 					}					
@@ -177,23 +180,43 @@
 				echo '
 				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>
 				<p><label>' . __('Title:','tp_tweets') . '</label>
-					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat" /></p>
+					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat rtw-title" /></p>
 				<p><label>' . __('Consumer Key:','tp_tweets') . '</label>
-					<input type="text" name="'.$this->get_field_name( 'consumerkey' ).'" id="'.$this->get_field_id( 'consumerkey' ).'" value="'.esc_attr($instance['consumerkey']).'" class="widefat" /></p>
+					<input type="text" name="'.$this->get_field_name( 'consumerkey' ).'" id="'.$this->get_field_id( 'consumerkey' ).'" value="'.esc_attr($instance['consumerkey']).'" class="widefat rtw-consumerkey"';
+					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
+						print ' disabled="disabled"';
+					}				
+					print ' /></p>';
+				echo '
 				<p><label>' . __('Consumer Secret:','tp_tweets') . '</label>
-					<input type="text" name="'.$this->get_field_name( 'consumersecret' ).'" id="'.$this->get_field_id( 'consumersecret' ).'" value="'.esc_attr($instance['consumersecret']).'" class="widefat" /></p>					
+					<input type="text" name="'.$this->get_field_name( 'consumersecret' ).'" id="'.$this->get_field_id( 'consumersecret' ).' " value="'.esc_attr($instance['consumersecret']).'" class="widefat rtw-consumersecret"';
+					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
+						print ' disabled="disabled"';
+					}				
+					print ' /></p>';					
+				echo '
 				<p><label>' . __('Access Token:','tp_tweets') . '</label>
-					<input type="text" name="'.$this->get_field_name( 'accesstoken' ).'" id="'.$this->get_field_id( 'accesstoken' ).'" value="'.esc_attr($instance['accesstoken']).'" class="widefat" /></p>									
+					<input type="text" name="'.$this->get_field_name( 'accesstoken' ).'" id="'.$this->get_field_id( 'accesstoken' ).'" value="'.esc_attr($instance['accesstoken']).'" class="widefat rtw-accesstoken"';
+					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
+						print ' disabled="disabled"';
+					}				
+					print ' /></p>';
+				echo '							
 				<p><label>' . __('Access Token Secret:','tp_tweets') . '</label>		
-					<input type="text" name="'.$this->get_field_name( 'accesstokensecret' ).'" id="'.$this->get_field_id( 'accesstokensecret' ).'" value="'.esc_attr($instance['accesstokensecret']).'" class="widefat" /></p>														
+					<input type="text" name="'.$this->get_field_name( 'accesstokensecret' ).'" id="'.$this->get_field_id( 'accesstokensecret' ).'"  value="'.esc_attr($instance['accesstokensecret']).'" class="widefat rtw-accesstokensecret"';
+					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
+						print ' disabled="disabled"';
+					}				
+					print ' /></p>';												
+				echo '
 				<p><label>' . __('Cache Tweets in every:','tp_tweets') . '</label>
-					<input type="text" name="'.$this->get_field_name( 'cachetime' ).'" id="'.$this->get_field_id( 'cachetime' ).'" value="'.esc_attr($instance['cachetime']).'" class="small-text"/> hours</p>';
+					<input type="text" name="'.$this->get_field_name( 'cachetime' ).'" id="'.$this->get_field_id( 'cachetime' ).'" value="'.esc_attr($instance['cachetime']).'" class="small-text rtw-cachetime"/> hours</p>';
 
 				echo '
 				<p><label>' . __('Twitter Username:','tp_tweets') . '</label>
-					<input type="text" name="'.$this->get_field_name( 'username' ).'" id="'.$this->get_field_id( 'username' ).'" value="'.esc_attr($instance['username']).'" class="widefat" /></p>																			
+					<input type="text" name="'.$this->get_field_name( 'username' ).'" id="'.$this->get_field_id( 'username' ).'" value="'.esc_attr($instance['username']).'" class="widefat rtw-username" /></p>																			
 				<p><label>' . __('Tweets to display:','tp_tweets') . '</label>
-					<select type="text" name="'.$this->get_field_name( 'tweetstoshow' ).'" id="'.$this->get_field_id( 'tweetstoshow' ).'">';
+					<select type="text" name="'.$this->get_field_name( 'tweetstoshow' ).'" id="'.$this->get_field_id( 'tweetstoshow' ).'" class="rtw-tweetstoshow">';
 					$i = 1;
 					for($i; $i <= 10; $i++){
 						echo '<option value="'.$i.'"'; if($instance['tweetstoshow'] == $i){ echo ' selected="selected"'; } echo '>'.$i.'</option>';			
@@ -201,7 +224,7 @@
 					echo '
 					</select></p>
 				<p><label>' . __('Exclude replies:','tp_tweets') . '</label>
-					<input type="checkbox" name="'.$this->get_field_name( 'excludereplies' ).'" id="'.$this->get_field_id( 'excludereplies' ).'" value="true"'; 
+					<input type="checkbox" name="'.$this->get_field_name( 'excludereplies' ).'" id="'.$this->get_field_id( 'excludereplies' ).'" class="rtw-excludereplies" value="true"'; 
 					if(!empty($instance['excludereplies']) && esc_attr($instance['excludereplies']) == 'true'){
 						print ' checked="checked"';
 					}				
@@ -285,7 +308,7 @@
 		wp_enqueue_script('test');
 
 	}
-	add_action( 'widgets_init', 'add_tp_twitter_plugin_script' );
+	add_action('wp_loaded', 'add_tp_twitter_plugin_script' );
 	add_action('widgets_init', 'register_tp_twitter_widget', 1);
 	
 ?>
