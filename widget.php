@@ -28,7 +28,8 @@
 						}
 
 						if( !empty($instance['loklak_api']) && ( esc_attr($instance['loklak_api']  == 'true'))){
-							require_once dirname(__FILE__).'/loklak_php_api/loklak.php';
+							if(!class_exists('Loklak'))
+								require_once dirname(__FILE__).'/loklak_php_api/loklak.php';
                 			$loklak = new Loklak();                			
 						}
 
@@ -304,11 +305,11 @@
 		register_widget('tp_widget_recent_tweets');
 	}
 	function add_tp_twitter_plugin_script(){
-		wp_register_script('test', plugin_dir_url( __FILE__ ).'/assets/js/tp_twitter_plugin.js', array('jquery'));
+		wp_register_script('test', plugin_dir_url( __FILE__ ).'assets/js/tp_twitter_plugin.js', array('jquery'));
 		wp_enqueue_script('test');
 
 	}
-	add_action('wp_loaded', 'add_tp_twitter_plugin_script' );
+	add_action('admin_enqueue_scripts', 'add_tp_twitter_plugin_script' );
 	add_action('widgets_init', 'register_tp_twitter_widget', 1);
 	
 ?>
