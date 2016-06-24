@@ -1,13 +1,4 @@
-function rtw_update_twitter_auth(arg) {
-    jQuery(".rtw-consumerkey").prop('disabled', arg);
-	jQuery(".rtw-consumersecret").prop('disabled', arg);
-	jQuery(".rtw-accesstoken").prop('disabled', arg);
-	jQuery(".rtw-accesstokensecret").prop('disabled', arg);
-}
-
-
 jQuery(function() {
-	console.log("init");
 	if(jQuery(".rtw-loklak_api").prop('checked')){
 		console.log("init");
 		rtw_update_twitter_auth(true);
@@ -21,5 +12,11 @@ jQuery(function() {
 	    	rtw_update_twitter_auth(false);
 	    }
 	});
-	
+
+	function rtw_update_twitter_auth(arg) {
+	    jQuery(".rtw-consumerkey").prop('disabled', arg);
+		jQuery(".rtw-consumersecret").prop('disabled', arg);
+		jQuery(".rtw-accesstoken").prop('disabled', arg);
+		jQuery(".rtw-accesstokensecret").prop('disabled', arg);
+	}
 });
