@@ -1,4 +1,5 @@
 === Recent Tweets Widget ===
+
 Contributors: noahkagan
 Tags: recent tweets, twitter widget, twitter api v1.1, cache, twitter, tweets, social media
 Requires at least: 3.4.1
@@ -34,7 +35,11 @@ You will need to visit [https://apps.twitter.com/](https://apps.twitter.com/ "Tw
 == Screenshots ==
 
 1. The widget
+
+	![The widget](./assets/screenshot-1.png)
 2. How it looks on frontend page
+
+	![How it looks on frontend page](./assets/screenshot-2.png)
 
 == Changelog ==
 
@@ -75,5 +80,6 @@ You will need to visit [https://apps.twitter.com/](https://apps.twitter.com/ "Tw
 == Upgrade Notice ==
 
 = 1.0 =
+
 None.
 
