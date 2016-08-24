@@ -1,39 +1,39 @@
 <?php
 add_thickbox();
-$tp_twitter_plugin_options = get_option('tp_twitter_plugin_options');
+$fa_twitter_plugin_options = get_option('fa_twitter_plugin_options');
 
-if (array_key_exists('tp_twitter_global_notification', $_GET) && $_GET['tp_twitter_global_notification'] == 0) {
-        update_option('tp_twitter_global_notification', 0);
+if (array_key_exists('fa_twitter_global_notification', $_GET) && $_GET['fa_twitter_global_notification'] == 0) {
+        update_option('fa_twitter_global_notification', 0);
 }
 ?>
 <div class="wrap">
         <?php settings_errors(); ?>
         <style type="text/css">
-                #tp_twitter_global_notification a.button:active {vertical-align:baseline;}
+                #fa_twitter_global_notification a.button:active {vertical-align:baseline;}
         </style>
-        <div id="tp_twitter_global_notification" class="updated" style="border:3px solid #317A96;position:relative;background:##3c9cc2;background-color:#3c9cc2;color:#ffffff;height:70px;">
+        <div id="fa_twitter_global_notification" class="updated" style="border:3px solid #317A96;position:relative;background:##3c9cc2;background-color:#3c9cc2;color:#ffffff;height:70px;">
                 <p style="font-size:16px;line-height:50px;">
                         <?php _e('Looking for more sharing tools?'); ?> &nbsp;<a style="background-color: #6267BE;border-color: #3C3F76;" href="<?php echo admin_url('plugin-install.php?tab=plugin-information&plugin=sumome&TB_iframe=true&width=743&height=500'); ?>" class="thickbox button button-primary">Get SumoMe WordPress Plugin</a>
                 </p>
         </div>
 	<?php screen_icon(); ?>
-	<h2>Recent Tweets</h2>
+	<h2>Recent Tweet</h2>
         <h3>Adding the Widget</h3>
         <p> You can either simply tick loklak.org in the widget settings to use the anonymous <a href="http://loklak.org/">loklak.org</a> service (no registration required) to get tweets showing up in your widget or follow the steps below to connect to twitter.</p>
         <ol>
-                <li><a href="<?php echo admin_url('widgets.php'); ?>" target="_blank">Go to your Widgets menu</a>, add the <code>Recent Tweets</code> widget to a widget area.</li>
+                <li><a href="<?php echo admin_url('widgets.php'); ?>" target="_blank">Go to your Widgets menu</a>, add the <code>Recent Tweet</code> widget to a widget area.</li>
                 <li>Visit <a href="https://apps.twitter.com/">https://apps.twitter.com/</a>, sign in with your account, click on <code>Create New App</code> and create your own keys if you haven't already.</li>
                 <li>Fill all your widget settings.</li>
                 <li>Enjoy your new Twitter feed! :)</li>
         </ol>
 	<form method="post" action="options.php"> 
-		<?php settings_fields( 'tp_twitter_plugin_options' ); ?>
+		<?php settings_fields( 'fa_twitter_plugin_options' ); ?>
 		<table class="form-table">
                 	<tr valign="top">
                 		<td scope="row" colspan="2">
-                                        <select name="tp_twitter_plugin_options[support-us]" id="support-us">
-                                                <option value="1" <?php echo is_array($tp_twitter_plugin_options) && $tp_twitter_plugin_options['support-us'] == '1' ? 'selected="selected"' : ''; ?>>Yes</option>
-                                                <option value="0" <?php echo !is_array($tp_twitter_plugin_options) || $tp_twitter_plugin_options['support-us'] != '1' ? 'selected="selected"' : ''; ?>>No</option>
+                                        <select name="fa_twitter_plugin_options[support-us]" id="support-us">
+                                                <option value="1" <?php echo is_array($fa_twitter_plugin_options) && $fa_twitter_plugin_options['support-us'] == '1' ? 'selected="selected"' : ''; ?>>Yes</option>
+                                                <option value="0" <?php echo !is_array($fa_twitter_plugin_options) || $fa_twitter_plugin_options['support-us'] != '1' ? 'selected="selected"' : ''; ?>>No</option>
                                         </select>
                                         <p>Show our link below the widget. Pretty please.</p>
                                 </td>
@@ -57,12 +57,12 @@ if (array_key_exists('tp_twitter_global_notification', $_GET) && $_GET['tp_twitt
                 <input type="hidden" name="listname" value="awlist3626406" />
                 <input type="hidden" name="redirect" value="http://email1k.sumome.com/tweet.html" id="redirect_19605a373ab8e7f77fc954424326ab1c" />
                 <input type="hidden" name="meta_redirect_onlist" value="http://email1k.sumome.com/tweet.html" />
-                <input type="hidden" name="meta_adtracking" value="recent-tweets-widget" />
+                <input type="hidden" name="meta_adtracking" value="recent-tweet" />
                 <input type="hidden" name="meta_message" value="1" />
                 <input type="hidden" name="meta_required" value="email" />
                 <input type="hidden" name="meta_tooltip" value="" />
         </form>
 
         <!--<p style="border:1px solid #CCCCCC;background:#FFFFFF;padding:8px;">Check out more sharing tools with our <a href="<?php echo admin_url('plugin-install.php?tab=plugin-information&plugin=sumome&TB_iframe=true&width=743&height=500'); ?>" class="thickbox">SumoMe WordPress plugin</a></p>-->
-        <p><i>If you find this plugin useful please <a href="https://wordpress.org/support/view/plugin-reviews/recent-tweets-widget" target="_blank">leave us a review!</a></i></p>
+        <p><i>If you find this plugin useful please <a href="https://wordpress.org/support/view/plugin-reviews/recent-tweet" target="_blank">leave us a review!</a></i></p>
 </div>

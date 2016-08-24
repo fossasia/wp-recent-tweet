@@ -1,13 +1,13 @@
 <?php
 
 // widget function
-	class tp_widget_recent_tweets extends WP_Widget {
+	class fa_widget_recent_tweet extends WP_Widget {
 		
 		public function __construct() {
 			parent::__construct(
-				'tp_widget_recent_tweets', // Base ID
-				'* Recent Tweets', // Name
-				array( 'description' => __( 'Display recent tweets', 'tp_tweets' ), ) // Args
+				'fa_widget_recent_tweet', // Base ID
+				'* Recent Tweet', // Name
+				array( 'description' => __( 'Display recent tweets', 'fa_tweets' ), ) // Args
 			);
 		}
 
@@ -23,7 +23,7 @@
 				
 					//check settings and die if not set
 						if((empty($instance['consumerkey']) || empty($instance['consumersecret']) || empty($instance['accesstoken']) || empty($instance['accesstokensecret']) || empty($instance['username'])) && empty($instance['loklak_api'])){
-							echo '<strong>'.__('Please fill all widget settings!','tp_tweets').'</strong>' . $after_widget;
+							echo '<strong>'.__('Please fill all widget settings!','fa_tweets').'</strong>' . $after_widget;
 							return;
 						}
 
@@ -35,19 +35,19 @@
 
 										
 					//check if cache needs update
-						$tp_twitter_plugin_last_cache_time = get_option('tp_twitter_plugin_last_cache_time');
-						$diff = time() - $tp_twitter_plugin_last_cache_time;
+						$fa_twitter_plugin_last_cache_time = get_option('fa_twitter_plugin_last_cache_time');
+						$diff = time() - $fa_twitter_plugin_last_cache_time;
 						$crt = $instance['cachetime'] * 3600;
 						
 					 //	yes, it needs update			
-						if($diff >= $crt || empty($tp_twitter_plugin_last_cache_time)){
+						if($diff >= $crt || empty($fa_twitter_plugin_last_cache_time)){
 							
 							if( isset($loklak)){
 					            $screen_name = explode('@', $instance['username'])[1];
 					            $tweets = $loklak->search('', null, null, $screen_name, 10);					            
 					            $tweets = json_decode($tweets, true);
 					            if(!($tweets = json_decode($tweets['body'], false))){
-					            	echo '<strong>'.__('Couldn\'t retrieve tweets from Loklak.org','tp_tweets').'</strong>' . $after_widget;
+					            	echo '<strong>'.__('Couldn\'t retrieve tweets from Loklak.org','fa_tweets').'</strong>' . $after_widget;
 					            	return;
 					            }
 
@@ -55,7 +55,7 @@
 					        }
 							else{
 								if(!require_once('twitteroauth.php')){ 
-									echo '<strong>'.__('Couldn\'t find twitteroauth.php!','tp_tweets').'</strong>' . $after_widget;
+									echo '<strong>'.__('Couldn\'t find twitteroauth.php!','fa_tweets').'</strong>' . $after_widget;
 									return;
 								}
 															
@@ -69,7 +69,7 @@
 							}					
 							if(!empty($tweets->errors)){
 								if($tweets->errors[0]->message == 'Invalid or expired token'){
-									echo '<strong>'.$tweets->errors[0]->message.'!</strong><br />' . __('You\'ll need to regenerate it <a href="https://apps.twitter.com/" target="_blank">here</a>!','tp_tweets') . $after_widget;
+									echo '<strong>'.$tweets->errors[0]->message.'!</strong><br />' . __('You\'ll need to regenerate it <a href="https://apps.twitter.com/" target="_blank">here</a>!','fa_tweets') . $after_widget;
 								}else{
 									echo '<strong>'.$tweets->errors[0]->message.'</strong>' . $after_widget;
 								}
@@ -91,26 +91,26 @@
 							}							
 							
 							//save tweets to wp option 		
-								update_option('tp_twitter_plugin_tweets',serialize($tweets_array));							
-								update_option('tp_twitter_plugin_last_cache_time',time());
+								update_option('fa_twitter_plugin_tweets',serialize($tweets_array));							
+								update_option('fa_twitter_plugin_last_cache_time',time());
 								
 							echo '<!-- twitter cache has been updated! -->';
 						}
 						
 						
 												
-					$tp_twitter_plugin_tweets = maybe_unserialize(get_option('tp_twitter_plugin_tweets'));
-					if(!empty($tp_twitter_plugin_tweets) && is_array($tp_twitter_plugin_tweets)){
+					$fa_twitter_plugin_tweets = maybe_unserialize(get_option('fa_twitter_plugin_tweets'));
+					if(!empty($fa_twitter_plugin_tweets) && is_array($fa_twitter_plugin_tweets)){
 						print '
-						<div class="tp_recent_tweets">
+						<div class="fa_recent_tweets">
 							<ul>';
 							$fctr = '1';
-							foreach($tp_twitter_plugin_tweets as $tweet){					
+							foreach($fa_twitter_plugin_tweets as $tweet){					
 								if(!empty($tweet['text'])){
 									if(empty($tweet['status_id'])){ $tweet['status_id'] = ''; }
 									if(empty($tweet['created_at'])){ $tweet['created_at'] = ''; }
 								
-									print '<li><span>'.tp_convert_links($tweet['text']).'</span><a class="twitter_time" target="_blank" href="http://twitter.com/'.$instance['username'].'/statuses/'.$tweet['status_id'].'">'.tp_relative_time($tweet['created_at']).'</a></li>';
+									print '<li><span>'.fa_convert_links($tweet['text']).'</span><a class="twitter_time" target="_blank" href="http://twitter.com/'.$instance['username'].'/statuses/'.$tweet['status_id'].'">'.fa_relative_time($tweet['created_at']).'</a></li>';
 									if($fctr == $instance['tweetstoshow']){ break; }
 									$fctr++;
 								}
@@ -121,15 +121,15 @@
 						</div>';
 
 							// If we're being supported display the link
-							$tp_twitter_plugin_options = get_option('tp_twitter_plugin_options');
+							$fa_twitter_plugin_options = get_option('fa_twitter_plugin_options');
 
-							if ($tp_twitter_plugin_options['support-us'] == 1) {
+							if ($fa_twitter_plugin_options['support-us'] == 1) {
 								print '<p><i>Check out the <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>';
 							}
 						
 					}else{
 						print '
-						<div class="tp_recent_tweets">
+						<div class="fa_recent_tweets">
 							' . __('<b>Error!</b> Couldn\'t retrieve tweets for some reason!','tp_tweets') . '
 						</div>';
 					}
@@ -157,7 +157,7 @@
 				$instance['loklak_api'] = strip_tags(  $new_instance['loklak_api'] );
 
 				if($old_instance['username'] != $new_instance['username']){
-					delete_option('tp_twitter_plugin_last_cache_time');
+					delete_option('fa_twitter_plugin_last_cache_time');
 				}
 				
 				return $instance;
@@ -177,46 +177,46 @@
 					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
 						print ' checked="checked"';
 					}					
-					print ' /><label>' . __('Use anonymous <a href="http://loklak.org/">loklak.org</a> API instead of Twitter. <a href="http://loklak.org/">Find out more</a>','tp_tweets') . '</label></p>';
+					print ' /><label>' . __('Use anonymous <a href="http://loklak.org/">loklak.org</a> API instead of Twitter. <a href="http://loklak.org/">Find out more</a>','fa_tweets') . '</label></p>';
 				echo '
 				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>
-				<p><label>' . __('Title:','tp_tweets') . '</label>
+				<p><label>' . __('Title:','fa_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat rtw-title" /></p>
-				<p><label>' . __('Consumer Key:','tp_tweets') . '</label>
+				<p><label>' . __('Consumer Key:','fa_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'consumerkey' ).'" id="'.$this->get_field_id( 'consumerkey' ).'" value="'.esc_attr($instance['consumerkey']).'" class="widefat rtw-consumerkey"';
 					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
 						print ' disabled="disabled"';
 					}				
 					print ' /></p>';
 				echo '
-				<p><label>' . __('Consumer Secret:','tp_tweets') . '</label>
+				<p><label>' . __('Consumer Secret:','fa_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'consumersecret' ).'" id="'.$this->get_field_id( 'consumersecret' ).' " value="'.esc_attr($instance['consumersecret']).'" class="widefat rtw-consumersecret"';
 					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
 						print ' disabled="disabled"';
 					}				
 					print ' /></p>';					
 				echo '
-				<p><label>' . __('Access Token:','tp_tweets') . '</label>
+				<p><label>' . __('Access Token:','fa_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'accesstoken' ).'" id="'.$this->get_field_id( 'accesstoken' ).'" value="'.esc_attr($instance['accesstoken']).'" class="widefat rtw-accesstoken"';
 					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
 						print ' disabled="disabled"';
 					}				
 					print ' /></p>';
 				echo '							
-				<p><label>' . __('Access Token Secret:','tp_tweets') . '</label>		
+				<p><label>' . __('Access Token Secret:','fa_tweets') . '</label>		
 					<input type="text" name="'.$this->get_field_name( 'accesstokensecret' ).'" id="'.$this->get_field_id( 'accesstokensecret' ).'"  value="'.esc_attr($instance['accesstokensecret']).'" class="widefat rtw-accesstokensecret"';
 					if(!empty($instance['loklak_api']) && esc_attr($instance['loklak_api']) == 'true'){
 						print ' disabled="disabled"';
 					}				
 					print ' /></p>';												
 				echo '
-				<p><label>' . __('Cache Tweets in every:','tp_tweets') . '</label>
+				<p><label>' . __('Cache Tweets in every:','fa_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'cachetime' ).'" id="'.$this->get_field_id( 'cachetime' ).'" value="'.esc_attr($instance['cachetime']).'" class="small-text rtw-cachetime"/> hours</p>';
 
 				echo '
-				<p><label>' . __('Twitter Username:','tp_tweets') . '</label>
+				<p><label>' . __('Twitter Username:','fa_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'username' ).'" id="'.$this->get_field_id( 'username' ).'" value="'.esc_attr($instance['username']).'" class="widefat rtw-username" /></p>																			
-				<p><label>' . __('Tweets to display:','tp_tweets') . '</label>
+				<p><label>' . __('Tweets to display:','fa_tweets') . '</label>
 					<select type="text" name="'.$this->get_field_name( 'tweetstoshow' ).'" id="'.$this->get_field_id( 'tweetstoshow' ).'" class="rtw-tweetstoshow">';
 					$i = 1;
 					for($i; $i <= 10; $i++){
@@ -224,7 +224,7 @@
 					}
 					echo '
 					</select></p>
-				<p><label>' . __('Exclude replies:','tp_tweets') . '</label>
+				<p><label>' . __('Exclude replies:','fa_tweets') . '</label>
 					<input type="checkbox" name="'.$this->get_field_name( 'excludereplies' ).'" id="'.$this->get_field_id( 'excludereplies' ).'" class="rtw-excludereplies" value="true"'; 
 					if(!empty($instance['excludereplies']) && esc_attr($instance['excludereplies']) == 'true'){
 						print ' checked="checked"';
@@ -239,8 +239,8 @@
 
 										
 					//convert links to clickable format
-					if (!function_exists('tp_convert_links')) {
-						function tp_convert_links($status,$targetBlank=true,$linkMaxLen=250){
+					if (!function_exists('fa_convert_links')) {
+						function fa_convert_links($status,$targetBlank=true,$linkMaxLen=250){
 						 
 							// the target
 								$target=$targetBlank ? " target=\"_blank\" " : "";
@@ -261,8 +261,8 @@
 					
 					
 					//convert dates to readable format	
-					if (!function_exists('tp_relative_time')) {
-						function tp_relative_time($a) {
+					if (!function_exists('fa_relative_time')) {
+						function fa_relative_time($a) {
 							//get current timestampt
 							$b = strtotime('now'); 
 							//get timestamp when tweet created
@@ -277,23 +277,23 @@
 								
 							if(is_numeric($d) && $d > 0) {
 								//if less then 3 seconds
-								if($d < 3) return __('right now','tp_tweets');
+								if($d < 3) return __('right now','fa_tweets');
 								//if less then minute
-								if($d < $minute) return floor($d) . __(' seconds ago','tp_tweets');
+								if($d < $minute) return floor($d) . __(' seconds ago','fa_tweets');
 								//if less then 2 minutes
-								if($d < $minute * 2) return __('about 1 minute ago','tp_tweets');
+								if($d < $minute * 2) return __('about 1 minute ago','fa_tweets');
 								//if less then hour
-								if($d < $hour) return floor($d / $minute) . __(' minutes ago','tp_tweets');
+								if($d < $hour) return floor($d / $minute) . __(' minutes ago','fa_tweets');
 								//if less then 2 hours
-								if($d < $hour * 2) return __('about 1 hour ago','tp_tweets');
+								if($d < $hour * 2) return __('about 1 hour ago','fa_tweets');
 								//if less then day
-								if($d < $day) return floor($d / $hour) . __(' hours ago','tp_tweets');
+								if($d < $day) return floor($d / $hour) . __(' hours ago','fa_tweets');
 								//if more then day, but less then 2 days
-								if($d > $day && $d < $day * 2) return __('yesterday','tp_tweets');
+								if($d > $day && $d < $day * 2) return __('yesterday','fa_tweets');
 								//if less then year
-								if($d < $day * 365) return floor($d / $day) . __(' days ago','tp_tweets');
+								if($d < $day * 365) return floor($d / $day) . __(' days ago','fa_tweets');
 								//else return more than a year
-								return __('over a year ago','tp_tweets');
+								return __('over a year ago','fa_tweets');
 							}
 						}	
 					}	
@@ -301,15 +301,14 @@
 	
 	
 // register	widget
-	function register_tp_twitter_widget(){
-		register_widget('tp_widget_recent_tweets');
+	function register_fa_twitter_widget(){
+		register_widget('fa_widget_recent_tweet');
 	}
-	function add_tp_twitter_plugin_script(){
-		wp_register_script('test', plugin_dir_url( __FILE__ ).'assets/js/tp_twitter_plugin.js', array('jquery'));
+	function add_fa_twitter_plugin_script(){
+		wp_register_script('test', plugin_dir_url( __FILE__ ).'assets/js/fa_twitter_plugin.js', array('jquery'));
 		wp_enqueue_script('test');
-
 	}
-	add_action('admin_enqueue_scripts', 'add_tp_twitter_plugin_script' );
-	add_action('widgets_init', 'register_tp_twitter_widget', 1);
+	add_action('admin_enqueue_scripts', 'add_fa_twitter_plugin_script' );
+	add_action('widgets_init', 'register_fa_twitter_widget', 1);
 	
 ?>
