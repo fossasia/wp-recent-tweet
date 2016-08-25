@@ -1,5 +1,4 @@
 .fa_recent_tweets {
-	float: left;
 	clear: left;
 
 }
@@ -10,7 +9,6 @@
 	background-position: 0px 4px;
 	padding-left: 30px;
 	padding-bottom: 20px;
-	float: left;
 	clear: left;
 	line-height: 20px;
 	list-style-type: none;
