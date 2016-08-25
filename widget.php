@@ -118,15 +118,7 @@
 						
 						print '
 							</ul> 
-						</div>';
-
-							// If we're being supported display the link
-							$fa_twitter_plugin_options = get_option('fa_twitter_plugin_options');
-
-							if ($fa_twitter_plugin_options['support-us'] == 1) {
-								print '<p><i>Check out the <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>';
-							}
-						
+						</div>';						
 					}else{
 						print '
 						<div class="fa_recent_tweets">
@@ -179,7 +171,6 @@
 					}					
 					print ' /><label>' . __('Use anonymous <a href="http://loklak.org/">loklak.org</a> API instead of Twitter. <a href="http://loklak.org/">Find out more</a>','fa_tweets') . '</label></p>';
 				echo '
-				<p><i>Check out our <a href="https://wordpress.org/plugins/sumome/" target="_blank">SumoMe</a> plugin</i></p>
 				<p><label>' . __('Title:','fa_tweets') . '</label>
 					<input type="text" name="'.$this->get_field_name( 'title' ).'" id="'.$this->get_field_id( 'title' ).'" value="'.esc_attr($instance['title']).'" class="widefat rtw-title" /></p>
 				<p><label>' . __('Consumer Key:','fa_tweets') . '</label>
